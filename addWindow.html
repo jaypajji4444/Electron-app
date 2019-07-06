@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AddWindow</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <form action="">
+      <div class="form-group">
+        <label for="list"><b>Enter Here</b></label>
+        <input type="text" name="list" id="userInput" class="form-control">
+        </div>
+        <div class="form-group">
+      <button type="submit" id="btn1" class="btn btn-primary">AddItem</button>
+    </div>
+    </form>
+    <div id="use">
+
+    </div>
+</body>
+
+<script>
+ const electron=require("electron");
+ const {ipcRenderer}=electron;
+
+ var btn1=document.querySelector("#btn1");
+ btn1.addEventListener("click",(e)=>{
+     e.preventDefault();
+     const item=document.querySelector("#userInput").value;
+   ipcRenderer.send("item:add",item);
+   
+ })
+ 
+ // catch the list event
+
+ ipcRenderer.on("jay",(event,data)=>{
+     
+     alert("cool"); 
+     console.log("hi") 
+ })
+
+
+
+</script>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>title</title>
+</head>
+<body>
+
+
+   <h1 class="text-info text-center">FoodList</h1>
+   <div class="container text-center">
+       <ol class="list-group">
+
+       </ol>
+   <button id="btn1" class="btn btn-primary">ShowItems</button>
+   <button id="btn2" class="btn btn-primary">AddItem</button>
+</div>
+<!--------------For displaying the order---->
+<h1 class="text-info text-center">YourCart</h1>
+
+   <div class="container">
+       <ol id="ol-cart"class="list-group">
+
+       </ol>
+   </div>
+</body>
+
+<script>
+const electron =require("electron");
+const {ipcRenderer}=electron;
+
+const list=[
+    {
+        name:"PavBhajji",
+        price:"$10",
+    },
+
+    {
+        name:"Pulav",
+        price:"$10",
+    },
+
+    {
+        name:"pannipuri",
+        price:"$10",
+    },
+
+    {
+        name:"Bhelpuri",
+        price:"$10",
+    }
+]
+
+
+const btn1=document.getElementById("btn1");
+const btn2=document.getElementById("btn2");
+
+
+
+// event handler dfor btn1 click-------------------------------------------------------
+btn1.addEventListener("click",(e)=>{
+    e.preventDefault();
+if(btn1.innerHTML=="ShowItems")
+    {
+        var ol=document.querySelector("ol");
+    list.forEach((item)=>{
+    var li=document.createElement("li");
+    li.setAttribute("class","list-group-item");
+    li.innerHTML=`${item.name}:: ${item.price} `;
+    ol.appendChild(li);
+    })
+
+
+    btn1.innerHTML="Hide";
+}
+
+else
+{
+btn1.innerHTML="ShowItems";
+document.querySelector("ol").innerHTML=" ";
+}
+})
+//==================================================================================
+
+
+// btn 2 event handler...-----------------------------------------------------------------
+
+btn2.addEventListener("click",(event)=>{
+    event.preventDefault();
+
+    // =====================================================cool Event to main ...................................................
+    ipcRenderer.send("cool",list);
+
+})
+
+
+// for displaying the resilt---------------------------------------------------------------------------------------
+var ol=document.getElementById("ol-cart");
+
+ol.addEventListener("dblclick",(e)=>{  // any li inside ul we click wil,l be removed..
+    e.target.remove();  
+})
+
+
+// catch add item
+ipcRenderer.on("item:add",(event,item)=>{
+
+ var flag=0;
+for(var i=0;i<list.length;i++)
+{
+    if(list[i].name==item)
+    {
+        
+var li=document.createElement("li");
+li.setAttribute("class","list-group-item")
+        li.innerHTML=item;
+        ol.appendChild(li);
+        break;
+    }
+    else
+    {
+       flag++;
+    }
+}
+    if(flag==list.length)
+    {
+        alert("Not Available");
+    }
+})
+
+//---------------------------------------------------------------------------------------------------------------------------
+
+
+
+     
+
+
+</script>
+</html>
